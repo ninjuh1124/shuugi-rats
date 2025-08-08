@@ -1,0 +1,26 @@
+{
+  "name": "@shuugi-rats/root",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/plugin-transform-runtime": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@preconstruct/cli": "^2.8.12"
+  },
+  "scripts": {
+    "postinstall": "preconstruct dev",
+    "build": "preconstruct build"
+  },
+  "preconstruct": {
+    "packages": [
+      ". packages/*"
+    ]
+  }
+}

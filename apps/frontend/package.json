@@ -1,0 +1,15 @@
+{
+  "name": "@shuugi-rats/frontend",
+  "version": "0.0.0",
+  "dependencies": {
+    "@preconstruct/next": "^4.0.0",
+    "next": "^15.4.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  }
+}
