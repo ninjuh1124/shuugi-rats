@@ -15,6 +15,36 @@ datasource db {
 }
 
 model User {
-  id    String    @id @unique @default(uuid())
-  name  String?
+  id          String    @id @unique @default(uuid())
+  name        String?
+  entries     Entry[]
+}
+
+model Session {
+  id          String    @id @unique @default(uuid())
+  name        String?
+  rules       Json
+  games       Game[]
+  createdAt   DateTime  @default(now())
+  expires     DateTime?
+  expired     Boolean   @default(false)
+}
+
+model Game {
+  id          String    @id @default(uuid())
+  entries     Entry[]
+  rules       Json
+  sessionId   String
+  session     Session   @relation(fields: [sessionId], references: [id])
+}
+
+model Entry {
+  id          String    @id @default(uuid())
+  score       Int
+  chipCount   Int?
+  rank        Int
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  gameId      String
+  game        Game      @relation(fields: [gameId], references: [id])
 }
