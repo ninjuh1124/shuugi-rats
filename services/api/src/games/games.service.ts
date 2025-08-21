@@ -8,19 +8,69 @@ export class GamesService {
   constructor(private prisma: PrismaService) { }
 
   create(createGameDto: CreateGameDto) {
-    return this.prisma.game.create({ data: createGameDto });
+    const gameData: Omit<CreateGameDto, "entries"> = Object.assign({}, createGameDto);
+    delete (gameData as Partial<CreateGameDto>).entries;
+
+    return this.prisma.$transaction(async (tx) => {
+      const game = await tx.game.create({ data: gameData });
+      if (createGameDto.entries.length) {
+        const entries = await Promise.all(createGameDto.entries.map((entry, i) =>
+          tx.entry.create({
+            data: entry,
+            include: {
+              game: i === 3 && {
+                include: {
+                  entries: true
+                }
+              }
+            }
+          })
+        ))
+
+        return entries.pop()!.game;
+      }
+
+      return game;
+    });
   }
 
   findAll() {
     return this.prisma.game.findMany();
   }
 
-  findOne(id: string) {
-    return this.prisma.game.findUnique({ where: { id } });
+  findBySessionId(sessionId: string) {
+    return this.prisma.game.findMany({ where: { sessionId } });
   }
 
   update(id: string, updateGameDto: UpdateGameDto) {
-    return this.prisma.game.update({ where: { id }, data: updateGameDto });
+    const gameData: Omit<UpdateGameDto, "entries"> = Object.assign({}, updateGameDto);
+    delete (gameData as Partial<UpdateGameDto>).entries;
+
+    return this.prisma.$transaction(async (tx) => {
+      const game = await tx.game.update({ where: { id }, data: gameData });
+
+      if (updateGameDto.entries?.length) {
+        const entries = await Promise.all(
+          updateGameDto.entries.map((entry, i) =>
+            tx.entry.update({
+              where: { id: entry.id },
+              data: entry,
+              include: {
+                game: i === 3 && {
+                  include: {
+                    entries: true
+                  }
+                }
+              }
+            })
+          )
+        );
+  
+        return entries.pop()!.game
+      }
+
+      return game;
+    });
   }
 
   remove(id: string) {

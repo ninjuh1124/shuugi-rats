@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEntryDto } from './dto/create-entry.dto';
-import { UpdateEntryDto } from './dto/update-entry.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class EntriesService {
-  create(createEntryDto: CreateEntryDto) {
-    return 'This action adds a new entry';
-  }
+  constructor(private prisma: PrismaService) { }
 
-  findAll() {
-    return `This action returns all entries`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} entry`;
-  }
-
-  update(id: number, updateEntryDto: UpdateEntryDto) {
-    return `This action updates a #${id} entry`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} entry`;
+  findBySessionId(sessionId: string) {
+    return this.prisma.entry.findMany({
+      where: { game: { sessionId } },
+      include: { game: true}
+    });
   }
 }

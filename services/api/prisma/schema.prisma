@@ -36,6 +36,9 @@ model Game {
   rules       Json
   sessionId   String
   session     Session   @relation(fields: [sessionId], references: [id])
+  createdAt   DateTime  @default(now())
+  // settlementId String?
+  // settlement Settlement? @relation(fields: [settlementId], references: [id])
 }
 
 model Entry {
@@ -48,3 +51,8 @@ model Entry {
   gameId      String
   game        Game      @relation(fields: [gameId], references: [id])
 }
+
+// model Settlement {
+//   id    String @id @default(uuid())
+//   games Game[]
+// }

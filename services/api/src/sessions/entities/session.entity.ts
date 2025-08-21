@@ -1,7 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Session } from "generated/prisma";
+import { GameEntity } from "src/games/entities/game.entity";
 
 export class SessionEntity implements Session {
+	constructor(partial: Partial<SessionEntity>) {
+		Object.assign(this, partial);
+	}
+
 	@ApiProperty()
 	id: string;
 
@@ -19,4 +24,7 @@ export class SessionEntity implements Session {
 
 	@ApiProperty()
 	expired: boolean;
+
+	@ApiProperty()
+	games: Partial<GameEntity>;
 }

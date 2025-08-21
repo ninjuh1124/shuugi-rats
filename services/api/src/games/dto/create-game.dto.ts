@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsJSON, IsNotEmpty, IsString } from "class-validator";
+import { IsArray, IsJSON, IsNotEmpty, IsString, IsUUID, Length } from "class-validator";
+import { CreateEntryDto } from "src/entries/dto/create-entry.dto";
 
 export class CreateGameDto {
 	@IsJSON()
@@ -11,4 +12,9 @@ export class CreateGameDto {
 	@IsNotEmpty()
 	@ApiProperty()
 	sessionId: string;
+
+	@IsArray()
+	@IsNotEmpty()
+	@Length(4, 4)
+	entries: CreateEntryDto[];
 }

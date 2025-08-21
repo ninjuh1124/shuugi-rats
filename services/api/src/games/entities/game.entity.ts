@@ -10,8 +10,12 @@ export class GameEntity implements Game {
 	id: string;
 
 	@ApiProperty()
+	// TODO: make rules object interface
 	rules: object;
 
 	@ApiProperty()
 	sessionId: string;
+
+	@ApiProperty()
+	createdAt: Date;
 }

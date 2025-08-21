@@ -16,7 +16,20 @@ export class SessionsService {
   }
 
   findOne(id: string) {
-    return this.prisma.session.findUnique({ where: { id } });
+    return this.prisma.session.findUnique({
+      where: { id },
+      include: {
+        games: {
+          include: {
+            entries: {
+              include: {
+                user: true
+              }
+            }
+          }
+        },
+      },
+    });
   }
 
   update(id: string, updateSessionDto: UpdateSessionDto) {
