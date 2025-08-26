@@ -12,7 +12,9 @@ export class SessionsService {
   }
 
   findAll() {
-    return this.prisma.session.findMany();
+    return this.prisma.session.findMany({
+      where: { expired: false }
+    });
   }
 
   findOne(id: string) {
