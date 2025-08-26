@@ -12,11 +12,29 @@
     "@babel/plugin-transform-runtime": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
-    "@preconstruct/cli": "^2.8.12"
+    "@preconstruct/cli": "^2.8.12",
+    "concurrently": "^9.2.1"
   },
   "scripts": {
     "postinstall": "preconstruct dev",
-    "build": "preconstruct build"
+    "build": "preconstruct build",
+    "dev": "concurrently \"yarn api:start:dev\" \"yarn frontend:dev -p 8080\"",
+    "start": "concurrently \"yarn api:start\" \"yarn frontend:start\"",
+    "api:build": "yarn workspace @shuugi-rats/api nest build",
+    "api:format": "yarn workspace @shuugi-rats/api prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "api:start": "yarn workspace @shuugi-rats/api nest start",
+    "api:start:dev": "yarn workspace @shuugi-rats/api nest start --watch",
+    "api:start:debug": "yarn workspace @shuugi-rats/api nest start --debug --watch",
+    "api:start:prod": "yarn workspace @shuugi-rats/api node dist/main",
+    "api:lint": "yarn workspace @shuugi-rats/api eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "api:test": "yarn workspace @shuugi-rats/api jest",
+    "api:test:watch": "yarn workspace @shuugi-rats/api jest --watch",
+    "api:test:cov": "yarn workspace @shuugi-rats/api jest --coverage",
+    "api:test:debug": "yarn workspace @shuugi-rats/api node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "api:test:e2e": "yarn workspace @shuugi-rats/api jest --config ./test/jest-e2e.json",
+    "frontend:dev": "yarn workspace @shuugi-rats/frontend next",
+    "frontend:build": "yarn workspace @shuugi-rats/frontend next build",
+    "frontend:start": "yarn workspace @shuugi-rats/frontend next start"
   },
   "preconstruct": {
     "packages": [
